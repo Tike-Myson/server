@@ -87,11 +87,7 @@ func NewPost(w http.ResponseWriter, r *http.Request) {
 			temp := strings.Split(InputTagsSplit, " ")
 			InputTags = DeleteDuplicateTags(temp)
 		}
-		PostID, err := uuid.NewV4()
-		if err != nil {
-			log.Fatal(err.Error())
-			return
-		}
+		PostID := uuid.NewV4()
 		if Title == "" || len(InputTags) == 0 || InputTagsSplit == "" || (Content == "" && imgURL == "") {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
@@ -105,11 +101,7 @@ func NewPost(w http.ResponseWriter, r *http.Request) {
 		ok = database.CreatePost(PostID.String(), UserID, username, Title, Content, currentTime, imgURL)
 
 		for _, v := range InputTags {
-			CategoryPostLinkID, err := uuid.NewV4()
-			if err != nil {
-				log.Fatal(err.Error())
-				return
-			}
+			CategoryPostLinkID := uuid.NewV4()
 			database.CreateCategoryPostLink(CategoryPostLinkID, PostID, v)
 		}
 
@@ -219,7 +211,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 			t.Execute(w, ResponseSignUp)
 			return
 		}
-		u1, err := uuid.NewV4()
+		u1 := uuid.NewV4()
 		if err != nil {
 			log.Fatal(err.Error())
 			return
@@ -537,11 +529,7 @@ func LikeComment(w http.ResponseWriter, r *http.Request) {
 	if CommentID == "" {
 		CommentID = uuid.Nil.String()
 	}
-	u1, err := uuid.NewV4()
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
+	u1 := uuid.NewV4()
 	if UserID == uuid.Nil {
 		http.Redirect(w, r, "/signin", 303)
 		return
@@ -588,7 +576,7 @@ func Like(w http.ResponseWriter, r *http.Request) {
 	if CommentID == "" {
 		CommentID = uuid.Nil.String()
 	}
-	u1, err := uuid.NewV4()
+	u1 := uuid.NewV4()
 	if err != nil {
 		log.Fatal(err.Error())
 		return
@@ -734,11 +722,7 @@ func DislikeComment(w http.ResponseWriter, r *http.Request) {
 	if CommentID == "" {
 		CommentID = uuid.Nil.String()
 	}
-	u1, err := uuid.NewV4()
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
+	u1 := uuid.NewV4()
 	if UserID == uuid.Nil {
 		http.Redirect(w, r, "/signin", 303)
 		return
@@ -773,11 +757,7 @@ func Dislike(w http.ResponseWriter, r *http.Request) {
 	if CommentID == "" {
 		CommentID = uuid.Nil.String()
 	}
-	u1, err := uuid.NewV4()
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
+	u1 := uuid.NewV4()
 	if UserID == uuid.Nil {
 		http.Redirect(w, r, "/signin", 303)
 		return
@@ -795,7 +775,7 @@ func Dislike(w http.ResponseWriter, r *http.Request) {
 //MakeCookie ...
 func MakeCookie(login string, Cookies map[string]string) http.Cookie {
 
-	u1, _ := uuid.NewV4()
+	u1 := uuid.NewV4()
 	Cookies[u1.String()] = login
 
 	expiration := time.Now().Add(1 * time.Hour)
@@ -865,11 +845,7 @@ func Comment(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	u1, err := uuid.NewV4()
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
+	u1 := uuid.NewV4()
 	UserID := database.GetUser(username)
 	currentTime := time.Now().Format("2006.01.02 15:04:05")
 	ok = database.CreateComment(u1.String(), UserID.String(), PostID, username, Content, currentTime)
